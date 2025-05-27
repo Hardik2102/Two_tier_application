@@ -1,10 +1,30 @@
 pipeline {
     agent any
+
     stages {
-        stage('Deploy Frontend') {
+        stage('Clone Code') {
             steps {
-                sh 'docker build -t frontend-app .'
-                sh 'docker run -d -p 8082:80 frontend-app'
+                git 'https://github.com/your-username/your-repo.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('Deploy to Backend') {
+            steps {
+                sshagent(['backend-key']) {
+                    sh '''
+                    scp -o StrictHostKeyChecking=no target/your-app.war ubuntu@54.163.38.9:/home/ubuntu/
+                    ssh -o StrictHostKeyChecking=no ubuntu@54.163.38.9 '
+                        sudo cp /home/ubuntu/your-app.war /opt/tomcat/webapps/
+                        sudo systemctl restart tomcat
+                    '
+                    '''
+                }
             }
         }
     }
