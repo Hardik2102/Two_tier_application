@@ -10,7 +10,9 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn clean package'
+                dir('backend') {
+                    sh 'mvn clean package'
+                }
             }
         }
 
@@ -18,7 +20,7 @@ pipeline {
             steps {
                 sshagent(['backend-key']) {
                     sh '''
-                    scp -o StrictHostKeyChecking=no target/your-app.war ubuntu@54.163.38.9:/home/ubuntu/
+                    scp -o StrictHostKeyChecking=no backend/target/your-app.war ubuntu@54.163.38.9:/home/ubuntu/
                     ssh -o StrictHostKeyChecking=no ubuntu@54.163.38.9 '
                         sudo cp /home/ubuntu/your-app.war /opt/tomcat/webapps/
                         sudo systemctl restart tomcat
