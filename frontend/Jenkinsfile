@@ -1,0 +1,11 @@
+pipeline {
+    agent any
+    stages {
+        stage('Deploy Frontend') {
+            steps {
+                sh 'docker build -t frontend-app .'
+                sh 'docker run -d -p 8082:80 frontend-app'
+            }
+        }
+    }
+}

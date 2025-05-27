@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Frontend</title>
+</head>
+<body>
+    <h1>Welcome to the Frontend!</h1>
+    <p>Backend Message: <span id="message"></span></p>
+    <script>
+        fetch("http://<BACKEND-IP>:8081/api/message")
+        .then(response => response.text())
+        .then(data => document.getElementById("message").innerText = data);
+    </script>
+</body>
+</html>

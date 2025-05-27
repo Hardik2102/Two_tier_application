@@ -1,0 +1,12 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build Backend') {
+            steps {
+                sh 'mvn clean package'
+                sh 'docker build -t backend-app .'
+                sh 'docker run -d -p 8081:8080 backend-app'
+            }
+        }
+    }
+}
